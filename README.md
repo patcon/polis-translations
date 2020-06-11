@@ -12,6 +12,8 @@ Configuration files for managing the project's translation server.
 
 [**Heroku CLI**](https://devcenter.heroku.com/articles/heroku-cli) is a command-line tool to manage Heroku apps directly from the terminal.
 
+[**Heroku CLI Plugin: Java**](https://github.com/heroku/plugin-java) is for working with Java applications on Heroku.
+
 ## Setup
 
 Requirement: [Install][install] the Heroku CLI.
@@ -35,8 +37,10 @@ Then visit http://localhost:5000
 
 ## Deployment
 
+**Note:** You'll need contributor access on the Heroku repo.
+
 ```
-heroku deploy:jar mojito-webapp.jar --app polis-translations
+heroku deploy:jar mojito-webapp.jar --includes application.properties --app polis-translations
 ```
 
 Then visit https://polis-translations.herokuapp.com

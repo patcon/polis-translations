@@ -1,1 +1,1 @@
-web: java -Dserver.port=$PORT -jar mojito-webapp.jar
+web: java -jar mojito-webapp.jar
