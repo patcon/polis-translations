@@ -46,6 +46,7 @@ Then visit http://localhost:5000
 **Note:** You'll need contributor access on the Heroku repo.
 
 ```
+heroku addons:create cleardb:ignite --version=5.7
 heroku config:set GITHUB_CLIENT_ID=xxxxxxxxxx
 heroku config:set GITHUB_CLIENT_SECRET=xxxxxxxxxxx
 heroku deploy:jar mojito-webapp.jar --includes application.properties --includes mojito-cli.jar
@@ -57,5 +58,9 @@ Then visit https://polis-translations.herokuapp.com
 
 - Authentication to the webapp is done via GitHub account login. [(docs)](https://www.mojito.global//docs/guides/authentication/#example-with-github)
   - You'll need to [create a GitHub app][create-gh-app] if you're creating a new translation server.
+  - Any GitHub user can sign in.
+  - There's currently no way to control user's access levels -- everyone gets full authorization. [chat context.](https://gitter.im/box/mojito?at=5ee2ab285782a31278f3d55c)
+- [Any MySQL or MariaDB addon within Heroku][mysql-addons] can be used.
 
    [create-gh-app]: https://developer.github.com/apps/building-github-apps/creating-a-github-app/
+   [mysql-addons]: https://elements.heroku.com/search/addons?q=mysql
