@@ -1,1 +1,4 @@
-mojito-webapp.jar
+mojito-webapp*.jar
+mojito-cli*.jar
+.env
+application.pid

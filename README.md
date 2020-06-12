@@ -23,13 +23,19 @@ Requirement: [Install][install] the Heroku CLI.
 On initial setup on your workstation, run:
 
 ```
+heroku git:remote polis-translations
 heroku plugins:install java
+
 wget --output-document=mojito-webapp.jar https://github.com/box/mojito/releases/download/v0.110/mojito-webapp-0.110.jar
+wget --output-document mojito-cli.jar https://github.com/box/mojito/releases/download/v0.110/mojito-cli-0.110.jar
 ```
 
 ## Run Locally
 
 ```
+# Edit to facilitate GitHub login.
+cp .env.sample .env
+
 heroku local web
 ```
 
@@ -40,7 +46,16 @@ Then visit http://localhost:5000
 **Note:** You'll need contributor access on the Heroku repo.
 
 ```
-heroku deploy:jar mojito-webapp.jar --includes application.properties --app polis-translations
+heroku config:set GITHUB_CLIENT_ID=xxxxxxxxxx
+heroku config:set GITHUB_CLIENT_SECRET=xxxxxxxxxxx
+heroku deploy:jar mojito-webapp.jar --includes application.properties --includes mojito-cli.jar
 ```
 
 Then visit https://polis-translations.herokuapp.com
+
+## Notes
+
+- Authentication to the webapp is done via GitHub account login. [(docs)](https://www.mojito.global//docs/guides/authentication/#example-with-github)
+  - You'll need to [create a GitHub app][create-gh-app] if you're creating a new translation server.
+
+   [create-gh-app]: https://developer.github.com/apps/building-github-apps/creating-a-github-app/
