@@ -23,11 +23,7 @@ Requirement: [Install][install] the Heroku CLI.
 On initial setup on your workstation, run:
 
 ```
-heroku git:remote polis-translations
-heroku plugins:install java
-
-wget --output-document=mojito-webapp.jar https://github.com/box/mojito/releases/download/v0.110/mojito-webapp-0.110.jar
-wget --output-document mojito-cli.jar https://github.com/box/mojito/releases/download/v0.110/mojito-cli-0.110.jar
+make setup
 ```
 
 ## Run Locally
@@ -46,10 +42,10 @@ Then visit http://localhost:5000
 **Note:** You'll need contributor access on the Heroku repo.
 
 ```
-heroku addons:create cleardb:ignite --version=5.7
+heroku addons:create jawsdb:kitefin --version=5.7
 heroku config:set GITHUB_CLIENT_ID=xxxxxxxxxx
 heroku config:set GITHUB_CLIENT_SECRET=xxxxxxxxxxx
-heroku deploy:jar mojito-webapp.jar --includes "application.properties:mojito-cli.jar"
+make deploy
 ```
 
 Then visit https://polis-translations.herokuapp.com
@@ -61,6 +57,7 @@ Then visit https://polis-translations.herokuapp.com
   - Any GitHub user can sign in.
   - There's currently no way to control user's access levels -- everyone gets full authorization. [chat context.](https://gitter.im/box/mojito?at=5ee2ab285782a31278f3d55c)
 - [Any MySQL or MariaDB addon within Heroku][mysql-addons] can be used.
+  - ClearDB seems to not work, as the `--version` flag isn't respected, and MySQL 5.7 can't be used.
 
    [create-gh-app]: https://developer.github.com/apps/building-github-apps/creating-a-github-app/
    [mysql-addons]: https://elements.heroku.com/search/addons?q=mysql
