@@ -13,7 +13,7 @@ setup:
 	wget --continue --progress=bar --output-document mojito-cli.jar https://github.com/box/mojito/releases/download/v$(mojito-version)/mojito-cli-$(mojito-version).jar
 
 config-pull:
-	heroku config --shell > .env
+	heroku config --shell >> .env
 
 local:
 	heroku local web
