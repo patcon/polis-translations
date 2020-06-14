@@ -49,7 +49,7 @@ Then visit http://localhost:5000
 heroku addons:create cleardb:ignite --version=5.7
 heroku config:set GITHUB_CLIENT_ID=xxxxxxxxxx
 heroku config:set GITHUB_CLIENT_SECRET=xxxxxxxxxxx
-heroku deploy:jar mojito-webapp.jar --includes application.properties --includes mojito-cli.jar
+heroku deploy:jar mojito-webapp.jar --includes "application.properties:mojito-cli.jar"
 ```
 
 Then visit https://polis-translations.herokuapp.com
