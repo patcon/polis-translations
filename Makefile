@@ -32,4 +32,21 @@ delete-db:
 db:
 	heroku addons:create  jawsdb:kitefin --version=5.7 --as=DATABASE
 
+init-db:
+	heroku local:run mojito repo-create --name polis -d "Polis" --locales es-419 da-DK de-DE fr-FR it-IT ja-JP nl-NL pt-BR zh-TW zh-CN
+	heroku local:run mojito push --repository polis --source-directory /tmp/polis-test
+
 reset-db: delete-db db
+
+stop:
+	heroku ps:scale web=0
+
+start:
+	heroku ps:scale web=1
+
+logs:
+	heroku logs --tail
+
+fresh: stop reset-db deploy start
+
+fresh-tail: fresh logs
