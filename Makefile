@@ -1,9 +1,10 @@
 heroku-app-name=polis-translations
 mojito-version=0.110
+MOJITO=java -jar mojito-cli.jar
 
 # Command affecting LOCAL workstation state.
 
-setup: ## prepare workstation and download deployable files
+setup: ## Prepare local workstation and download deployable files
 	heroku git:remote $(heroku-app-name)
 	heroku plugins:install java
 	wget --continue --progress=bar --output-document=mojito-webapp.jar https://github.com/box/mojito/releases/download/v$(mojito-version)/mojito-webapp-$(mojito-version).jar
@@ -29,9 +30,16 @@ delete-db: ## Delete the remote Heroku database
 db: ## Create the remote Heroku database
 	heroku addons:create  jawsdb:kitefin --version=5.7 --as=DATABASE
 
-init-db: 
-	heroku local:run mojito repo-create --name polis -d "Polis" --locales es-419 da-DK de-DE fr-FR it-IT ja-JP nl-NL pt-BR zh-TW zh-CN
-	heroku local:run mojito push --repository polis --source-directory /tmp/polis-test
+project: ## Create a new translation project (AKA repo)
+	heroku local:run $(MOJITO) repo-create --name polis -d "Polis" --locales es-419 da-DK de-DE fr-FR it-IT ja-JP nl-NL pt-BR zh-TW zh-CN
+	@#heroku local:run $(MOJITO) push --repository polis --source-directory "${SRC_PATH}"
+
+import: ## Import initial strings to populate project
+ifndef SRC_PATH
+	@echo "SRC_PATH not set. Aborting..."
+	@exit 1
+endif
+	heroku local:run $(MOJITO) import --repository polis --source-directory "${SRC_PATH}"
 
 reset-db: delete-db db ## Delete and recreate the remote Heroku database
 
