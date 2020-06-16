@@ -14,6 +14,29 @@ Configuration files for managing the project's translation server.
 
 [**Heroku CLI Plugin: Java**](https://github.com/heroku/plugin-java) is for working with Java applications on Heroku.
 
+We use `make` to run helper tasks. To see the available tasks, run `make` without any arguments:
+
+```
+$ make
+Usage: make <command>
+
+where <command> is one of the following:
+
+setup                prepare workstation and download deployable files
+config-pull          Override local .env with heroku envvvars
+local                Run webapp locally using local .env
+deploy               Deploy the app to Heroku
+console              Run a remote shell console on Heroku
+delete-db            Delete the remote Heroku database
+db                   Create the remote Heroku database
+reset-db             Delete and recreate the remote Heroku database
+stop                 Stop the Heroku webapp
+start                Start the Heroku webapp
+logs                 Tail the remote Heroku logs
+fresh                Purge and recreate the database and deploy the current app fresh
+fresh-tail           Start fresh, and immediately tail the logs
+```
+
 ## Setup
 
 Requirement: [Install][install] the Heroku CLI.
