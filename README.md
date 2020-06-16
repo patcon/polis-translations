@@ -55,7 +55,7 @@ make setup
 # Edit to facilitate GitHub login.
 cp .env.sample .env
 
-heroku local web
+make local
 ```
 
 Then visit http://localhost:5000
@@ -68,6 +68,8 @@ Then visit http://localhost:5000
 heroku addons:create jawsdb:kitefin --version=5.7
 heroku config:set GITHUB_CLIENT_ID=xxxxxxxxxx
 heroku config:set GITHUB_CLIENT_SECRET=xxxxxxxxxxx
+heroku config:set MOJITO_CLI_USERNAME=admin
+heroku config:set MOJITO_CLI_PASSWORD=xxxxxxxxxx
 make deploy
 ```
 
