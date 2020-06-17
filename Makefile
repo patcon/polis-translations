@@ -1,6 +1,7 @@
 heroku-app-name=polis-translations
 mojito-version=0.110
 MOJITO=java -jar mojito-cli.jar
+locales=es-419 "(da-DK)" de-DE fr-FR it-IT ja-JP nl-NL pt-BR zh-TW zh-CN
 
 # Command affecting LOCAL workstation state.
 
@@ -24,22 +25,43 @@ deploy: ## Deploy the app to Heroku
 console: ## Run a remote shell console on Heroku
 	heroku run bash
 
-delete-db: ## Delete the remote Heroku database
+delete-db: check ## Delete the remote Heroku database
 	heroku addons:destroy jawsdb --confirm=$(heroku-app-name)
 
 db: ## Create the remote Heroku database
 	heroku addons:create  jawsdb:kitefin --version=5.7 --as=DATABASE
 
 project: ## Create a new translation project (AKA repo)
-	heroku local:run $(MOJITO) repo-create --name polis -d "Polis" --locales es-419 da-DK de-DE fr-FR it-IT ja-JP nl-NL pt-BR zh-TW zh-CN
-	@#heroku local:run $(MOJITO) push --repository polis --source-directory "${SRC_PATH}"
+	heroku local:run $(MOJITO) repo-create --name polis -d "Polis" --locales $(locales)
 
-import: ## Import initial strings to populate project
+project-update: ## Update the translation project (AKA repo)
+	heroku local:run $(MOJITO) repo-update --name polis -d "Polis" --locales $(locales)
+
+project-import: ## Import initial strings to populate project in Mojito TMS
 ifndef SRC_PATH
 	@echo "SRC_PATH not set. Aborting..."
 	@exit 1
 endif
 	heroku local:run $(MOJITO) import --repository polis --source-directory "${SRC_PATH}"
+
+project-push: ## Push strings to project in Mojito TMS
+ifndef SRC_PATH
+	@echo "SRC_PATH not set. Aborting..."
+	@exit 1
+endif
+	heroku local:run $(MOJITO) push --repository polis --source-directory "${SRC_PATH}"
+
+project-pull: ## Pull strings from project in Mojito TMS
+ifndef SRC_PATH
+	@echo "SRC_PATH not set. Aborting..."
+	@exit 1
+endif
+	heroku local:run $(MOJITO) pull --repository polis --source-directory "${SRC_PATH}"
+
+project-delete: check ## Delete the polis project from Mojito TMS. CAREFUL.
+	heroku local:run $(MOJITO) repo-delete --name polis
+
+project-init: project project-push project-import
 
 reset-db: delete-db db ## Delete and recreate the remote Heroku database
 
@@ -60,6 +82,10 @@ fresh-tail: fresh logs ## Start fresh, and immediately tail the logs
 	@true
 
 .PHONY: help
+
+check: # A sanity check
+	@echo Warning: "Warning: This is a destructive action! Continue? [Y/n]"
+	@read line; if [ $$line = "n" ]; then echo aborting; exit 1 ; fi
 
 help:
 	@echo 'Usage: make <command>'
