@@ -56,12 +56,14 @@ ifndef SRC_PATH
 	@echo "SRC_PATH not set. Aborting..."
 	@exit 1
 endif
-	heroku local:run $(MOJITO) pull --repository polis --source-directory "${SRC_PATH}"
+	heroku local:run $(MOJITO) pull --repository polis --source-directory "${SRC_PATH}" --inheritance-mode REMOVE_UNTRANSLATED
 
 project-delete: check ## Delete the polis project from Mojito TMS. CAREFUL.
 	heroku local:run $(MOJITO) repo-delete --name polis
 
 project-init: project project-push project-import
+
+project-reset: project-delete project-init
 
 reset-db: delete-db db ## Delete and recreate the remote Heroku database
 
