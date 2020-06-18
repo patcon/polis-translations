@@ -1,6 +1,7 @@
 heroku-app-name=polis-translations
 mojito-version=0.110
 MOJITO=java -jar mojito-cli.jar
+project-name=polis:client-participation
 locales=es-419 "(da-DK)" de-DE fr-FR it-IT ja-JP nl-NL pt-BR zh-TW zh-CN
 
 # Command affecting LOCAL workstation state.
@@ -32,34 +33,34 @@ db: ## Create the remote Heroku database
 	heroku addons:create  jawsdb:kitefin --version=5.7 --as=DATABASE
 
 project: ## Create a new translation project (AKA repo)
-	heroku local:run $(MOJITO) repo-create --name polis -d "Polis" --locales $(locales)
+	heroku local:run $(MOJITO) repo-create --name $(project-name) -d "Polis" --locales $(locales)
 
 project-update: ## Update the translation project (AKA repo)
-	heroku local:run $(MOJITO) repo-update --name polis -d "Polis" --locales $(locales)
+	heroku local:run $(MOJITO) repo-update --name $(project-name) -d "Polis" --locales $(locales)
 
 project-import: ## Import initial strings to populate project in Mojito TMS
 ifndef SRC_PATH
 	@echo "SRC_PATH not set. Aborting..."
 	@exit 1
 endif
-	heroku local:run $(MOJITO) import --repository polis --source-directory "${SRC_PATH}"
+	heroku local:run $(MOJITO) import --repository $(project-name) --source-directory "${SRC_PATH}"
 
 project-push: ## Push strings to project in Mojito TMS
 ifndef SRC_PATH
 	@echo "SRC_PATH not set. Aborting..."
 	@exit 1
 endif
-	heroku local:run $(MOJITO) push --repository polis --source-directory "${SRC_PATH}"
+	heroku local:run $(MOJITO) push --repository $(project-name) --source-directory "${SRC_PATH}"
 
 project-pull: ## Pull strings from project in Mojito TMS
 ifndef SRC_PATH
 	@echo "SRC_PATH not set. Aborting..."
 	@exit 1
 endif
-	heroku local:run $(MOJITO) pull --repository polis --source-directory "${SRC_PATH}" --inheritance-mode REMOVE_UNTRANSLATED
+	heroku local:run $(MOJITO) pull --repository $(project-name) --source-directory "${SRC_PATH}" --inheritance-mode REMOVE_UNTRANSLATED
 
 project-delete: check ## Delete the polis project from Mojito TMS. CAREFUL.
-	heroku local:run $(MOJITO) repo-delete --name polis
+	heroku local:run $(MOJITO) repo-delete --name $(project-name)
 
 project-init: project project-push project-import
 
