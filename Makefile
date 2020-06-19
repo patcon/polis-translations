@@ -68,6 +68,15 @@ project-reset: project-delete project-init
 
 reset-db: delete-db db ## Delete and recreate the remote Heroku database
 
+change-password: ## Change password for admin CLI user
+	heroku local:run $(MOJITO) user-update --username admin --password
+	@echo
+	@echo ">>> Success! Password changed."
+	@echo
+	@echo "    Remember to update any MOJITO_CLI_PASSWORD envvar wherever it's used, including:"
+	@echo "      - within the .env file of the current directory, and"
+	@echo "      - within the "Secrets" setting of any GitHub repos, used for Github Action workflows."
+
 stop: ## Stop the Heroku webapp
 	heroku ps:scale web=0
 
