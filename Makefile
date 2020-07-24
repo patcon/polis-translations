@@ -6,6 +6,9 @@ locales=es-419 "(da-DK)" de-DE fr-FR it-IT ja-JP nl-NL pt-BR zh-TW zh-CN
 
 # Command affecting LOCAL workstation state.
 
+check-java:
+	@java -version 2>&1 | grep '1.8' > /dev/null || (echo 'Must be using Java 8. Exiting...' && exit 1)
+
 setup: ## Prepare local workstation and download deployable files
 	heroku git:remote $(heroku-app-name)
 	heroku plugins:install java
@@ -35,7 +38,7 @@ db: ## Create the remote Heroku database
 project: ## Create a new translation project (AKA repo)
 	heroku local:run $(MOJITO) repo-create --name $(project-name) -d "Polis" --locales $(locales)
 
-project-update: ## Update the translation project (AKA repo)
+project-update: check-java ## Update the translation project (AKA repo)
 	heroku local:run $(MOJITO) repo-update --name $(project-name) -d "Polis" --locales $(locales)
 
 project-import: ## Import initial strings to populate project in Mojito TMS
